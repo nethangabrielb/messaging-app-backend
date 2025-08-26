@@ -15,9 +15,10 @@ const validateRegistration = [
     // Return errors if there are any
     if (!errors.isEmpty()) {
       const errorsArr = errors.array({ onlyFirstError: true });
+      console.log(errorsArr);
       return res.json({
         code: "INVALID_INPUT",
-        message: errorsArr.map((err) => err.msg),
+        data: errorsArr.map((err) => err),
         statusCode: 400,
       });
     } else {
