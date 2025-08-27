@@ -6,12 +6,12 @@ const loginController = (() => {
   const prisma = new PrismaClient();
 
   const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
+    if (!email || !password) {
       return res.status(400).json({
         code: "LOGIN_FIELDS_MISSING",
-        message: "Login fields are missing.",
+        message: "Login fields are missing",
         status: 400,
       });
     }
@@ -19,15 +19,15 @@ const loginController = (() => {
     // Find user in the database
     const user = await prisma.user.findUnique({
       where: {
-        username,
+        email,
       },
     });
 
     // Return error if user is not found
     if (!user) {
       return res.status(404).json({
-        code: "INVALID_USERNAME",
-        message: "Username not found.",
+        code: "INVALID_email",
+        message: "Email is not found",
         status: 404,
       });
     }
@@ -38,7 +38,7 @@ const loginController = (() => {
     if (!isPasswordValid) {
       return res.status(401).json({
         code: "INVALID_PASSWORD",
-        message: "Password is incorrect.",
+        message: "Password is incorrect",
         status: 401,
       });
     }

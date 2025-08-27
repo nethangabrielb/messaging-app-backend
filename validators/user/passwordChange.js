@@ -16,7 +16,7 @@ const validatePassword = [
       return res.json({
         code: "INVALID_INPUT",
         message: errorsArr.map((err) => err.msg),
-        statusCode: 400,
+        status: 400,
       });
     } else {
       next();

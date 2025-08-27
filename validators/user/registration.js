@@ -4,7 +4,7 @@ import email from "../rules/email.js";
 import password from "../rules/password.js";
 import confirmPassword from "../rules/confirmPassword.js";
 
-const registrationValidation = [username, email, password, confirmPassword];
+const registrationValidation = [email, username, password, confirmPassword];
 
 const validateRegistration = [
   registrationValidation,
@@ -16,10 +16,10 @@ const validateRegistration = [
     if (!errors.isEmpty()) {
       const errorsArr = errors.array({ onlyFirstError: true });
       console.log(errorsArr);
-      return res.json({
+      return res.status(400).json({
         code: "INVALID_INPUT",
         data: errorsArr.map((err) => err),
-        statusCode: 400,
+        status: 400,
       });
     } else {
       next();

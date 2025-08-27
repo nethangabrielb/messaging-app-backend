@@ -5,17 +5,17 @@ const prisma = new PrismaClient();
 
 export default body("username")
   .exists()
-  .withMessage("Username is required.")
+  .withMessage("Username is required")
   .trim()
   .notEmpty()
-  .withMessage("Username can't be empty.")
+  .withMessage("Username can't be empty")
   .custom(async (value) => {
     const user = await prisma.user.findFirst({
       where: {
         username: value,
       },
     });
-    if (!user) return true;
-    return value !== user.username;
-  })
-  .withMessage("Username already exists.");
+    if (user) {
+      throw new Error("Username is already taken");
+    }
+  });
