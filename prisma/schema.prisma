@@ -19,7 +19,8 @@ model User {
   username        String    @unique
   email           String    @unique
   password        String
-  status          Status
+  bio             String?
+  status          Status?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   MessageReceiver Message[] @relation("MessageReceiver")
