@@ -1,10 +1,10 @@
 import express from "express";
-import loginController from "../controllers/guest/loginController.js";
-import registerController from "../controllers/guest/registerController.js";
-import forgotPasswordController from "../controllers/guest/forgotPasswordController.js";
-import verifyEmailController from "../controllers/guest/verifyEmailController.js";
-import verifyResetCodeController from "../controllers/guest/verifyResetCodeController.js";
-import resetPasswordController from "../controllers/guest/resetPasswordController.js";
+import loginController from "../../controllers/guest/loginController.js";
+import registerController from "../../controllers/guest/registerController.js";
+import forgotPasswordController from "../../controllers/guest/forgotPasswordController.js";
+import verifyEmailController from "../../controllers/guest/verifyEmailController.js";
+import verifyResetCodeController from "../../controllers/guest/verifyResetCodeController.js";
+import resetPasswordController from "../../controllers/guest/resetPasswordController.js";
 
 const { Router } = express;
 const guestRouter = Router();
