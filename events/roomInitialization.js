@@ -24,8 +24,6 @@ const initializeRoom = async (token, recipientId, callback) => {
     },
   });
 
-  console.log(room);
-
   if (!room) {
     callback({ success: false });
   } else {
