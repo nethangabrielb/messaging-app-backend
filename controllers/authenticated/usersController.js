@@ -17,6 +17,7 @@ const usersController = (() => {
         code: "INTERNAL_SERVER_ERROR",
         message: "There was a problem fetching users",
         status: 500,
+        data: e,
       });
     }
   };

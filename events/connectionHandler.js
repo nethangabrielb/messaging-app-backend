@@ -1,6 +1,7 @@
+import initializeRoom from "./roomInitialization.js";
+
 const onConnection = (socket) => {
-  console.log("someone has connected!");
-  console.log(socket);
+  socket.on("create room", initializeRoom);
 };
 
 export default onConnection;
