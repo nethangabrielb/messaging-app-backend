@@ -12,22 +12,38 @@ const initializeRoom = async (token, recipientId, callback) => {
     },
   });
 
-  // Create unique room name
+  // Find room if it exists
   const roomName = CryptoJS.MD5(
     `${client.username}${recipient.username}`
   ).toString();
 
-  // Create room
-  const room = await prisma.room.create({
-    data: {
+  const room = await prisma.room.findUnique({
+    where: {
       name: roomName,
     },
   });
-
-  if (!room) {
-    callback({ success: false });
+  if (room) {
+    callback({ success: true, message: null, room });
   } else {
-    callback({ success: true });
+    // Otherwise create new room
+    const roomNew = await prisma.room.create({
+      data: {
+        name: roomName,
+      },
+    });
+    if (roomNew) {
+      callback({
+        success: true,
+        message: "Chatroom created successfully!",
+        room: roomNew,
+      });
+    } else {
+      callback({
+        success: false,
+        message: "There was an issue creating chatroom.",
+        room: roomNew,
+      });
+    }
   }
 };
 
