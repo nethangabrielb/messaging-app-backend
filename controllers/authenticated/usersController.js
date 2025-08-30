@@ -5,7 +5,13 @@ const prisma = new PrismaClient();
 const usersController = (() => {
   const getAllUsers = async (req, res) => {
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        where: {
+          id: {
+            not: req.user.id,
+          },
+        },
+      });
       return res.status(200).json({
         code: "FETCH_SUCCESS",
         message: "Users fetched successfuly",

@@ -7,6 +7,7 @@ const verifyToken = (req, res, next) => {
   const data = jwt.verify(token, process.env.JWT_SECRET);
 
   if (data) {
+    req.user = data;
     next();
   } else {
     res.status(403).json({
