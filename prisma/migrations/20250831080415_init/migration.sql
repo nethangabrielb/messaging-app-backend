@@ -1,28 +1,25 @@
-/*
-  Warnings:
-
-  - You are about to drop the column `emailVerified` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the `Otp` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- CreateEnum
 CREATE TYPE "public"."Status" AS ENUM ('ONLINE', 'OFFLINE', 'BUSY');
 
--- DropForeignKey
-ALTER TABLE "public"."Otp" DROP CONSTRAINT "Otp_userId_fkey";
+-- CreateTable
+CREATE TABLE "public"."User" (
+    "id" SERIAL NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "bio" TEXT,
+    "status" "public"."Status",
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "roomId" INTEGER,
 
--- AlterTable
-ALTER TABLE "public"."User" DROP COLUMN "emailVerified",
-ADD COLUMN     "bio" TEXT,
-ADD COLUMN     "status" "public"."Status";
-
--- DropTable
-DROP TABLE "public"."Otp";
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "public"."Room" (
     "id" SERIAL NOT NULL,
-    "url" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
 
     CONSTRAINT "Room_pkey" PRIMARY KEY ("id")
 );
@@ -40,7 +37,16 @@ CREATE TABLE "public"."Message" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Room_url_key" ON "public"."Room"("url");
+CREATE UNIQUE INDEX "User_username_key" ON "public"."User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Room_name_key" ON "public"."Room"("name");
+
+-- AddForeignKey
+ALTER TABLE "public"."User" ADD CONSTRAINT "User_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "public"."Room"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Message" ADD CONSTRAINT "Message_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "public"."Room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
