@@ -25,12 +25,14 @@ model User {
   updatedAt       DateTime  @updatedAt
   MessageReceiver Message[] @relation("MessageReceiver")
   MessageSender   Message[] @relation("MessageSender")
+  room            Room[]    @relation("chatroom")
 }
 
 model Room {
   id      Int       @id @default(autoincrement())
   name    String    @unique
   Message Message[]
+  users   User[]    @relation("chatroom")
 }
 
 model Message {

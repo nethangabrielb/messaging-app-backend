@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 const initializeRoom = async (token, recipientId, callback) => {
   const client = jwt.verify(token, process.env.JWT_SECRET);
+  delete client.iat;
   const recipient = await prisma.user.findUnique({
     where: {
       id: Number(recipientId),
@@ -29,6 +30,9 @@ const initializeRoom = async (token, recipientId, callback) => {
     const roomNew = await prisma.room.create({
       data: {
         name: roomName,
+        users: {
+          connect: [client, recipient],
+        },
       },
     });
     if (roomNew) {
