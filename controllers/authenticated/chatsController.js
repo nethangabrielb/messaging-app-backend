@@ -22,6 +22,9 @@ const chatsController = (() => {
                 not: Number(userId),
               },
             },
+            select: {
+              username: true,
+            },
           },
         },
       });
