@@ -6,6 +6,6 @@ const { Router } = express;
 
 const chatRouter = Router();
 
-chatRouter.get("/:userId", verifyToken, chatsController.getChats);
+chatRouter.get("/", verifyToken, chatsController.getChats);
 
 export default chatRouter;

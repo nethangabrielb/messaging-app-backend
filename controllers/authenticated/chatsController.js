@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const chatsController = (() => {
   const getChats = async (req, res) => {
     try {
-      const userId = req.params.userId;
+      const userId = req.user.id;
 
       const chats = await prisma.room.findMany({
         where: {
