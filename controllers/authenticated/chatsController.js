@@ -15,7 +15,18 @@ const chatsController = (() => {
             },
           },
         },
+        include: {
+          users: {
+            where: {
+              id: {
+                not: Number(userId),
+              },
+            },
+          },
+        },
       });
+
+      console.log(chats);
 
       return res.status(200).json({
         code: "RETRIEVE_SUCCESS",
