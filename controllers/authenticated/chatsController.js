@@ -29,8 +29,6 @@ const chatsController = (() => {
         },
       });
 
-      console.log(chats);
-
       return res.status(200).json({
         code: "RETRIEVE_SUCCESS",
         message: "Chats retrieved successfuly!",
