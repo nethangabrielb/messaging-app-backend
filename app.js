@@ -8,6 +8,7 @@ import onConnection from "./events/connectionHandler.js";
 import guestRouter from "./routes/guest/guestRouter.js";
 import userRouter from "./routes/authenticated/userRouter.js";
 import chatRouter from "./routes/authenticated/chatRouter.js";
+import messageRouter from "./routes/authenticated/messageRouter.js";
 
 dotenv.config();
 
