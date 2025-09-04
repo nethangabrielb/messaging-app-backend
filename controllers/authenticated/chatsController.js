@@ -7,6 +7,9 @@ const chatsController = (() => {
     try {
       const userId = req.user.id;
 
+      // Get chats where the room contains id of at least the user
+      // making the request, returning the rooms associated with the
+      // user
       const chats = await prisma.room.findMany({
         where: {
           users: {
@@ -15,6 +18,8 @@ const chatsController = (() => {
             },
           },
         },
+        // We then filter this room to return the id of the other person
+        // that is in the chat room. This allows us to render the recipient
         include: {
           users: {
             where: {
