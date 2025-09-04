@@ -6,6 +6,10 @@ const { Router } = express;
 
 const messageRouter = Router();
 
-messageRouter.get("/", verifyToken, messagesController.getMessages);
+messageRouter.get(
+  "/:roomName",
+  verifyToken,
+  messagesController.getRoomMessages
+);
 
 export default messageRouter;
