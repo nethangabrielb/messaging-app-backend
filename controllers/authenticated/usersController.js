@@ -5,10 +5,6 @@ const prisma = new PrismaClient();
 const usersController = (() => {
   const getAllUsers = async (req, res) => {
     const { tokenHolder } = req.query;
-    console.log(req.query);
-
-    console.log(tokenHolder);
-
     if (tokenHolder === "true") {
       const user = await prisma.user.findMany({
         where: {
