@@ -18,6 +18,7 @@ const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
   },
+  connectionStateRecovery: {},
 });
 
 app.use(cors());

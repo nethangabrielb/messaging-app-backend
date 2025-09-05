@@ -21,6 +21,7 @@ const messageHandler = async (message, token, roomName, callback) => {
 
   if (returnedMessage) {
     callback({ success: true });
+    return { success: true, senderData };
   }
 };
 
