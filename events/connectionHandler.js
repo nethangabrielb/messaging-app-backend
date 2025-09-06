@@ -4,7 +4,13 @@ import messageHandler from "./messageHandler.js";
 
 const onConnection = (socket) => {
   // set user to online upon login event
-  socket.on("set online", connectHandler);
+  socket.on("set online", async (token, status, callback) => {
+    const isSuccess = await connectHandler(token, status, callback);
+
+    if (isSuccess) {
+      socket.broadcast.emit("set online", { refetch: true });
+    }
+  });
 
   // create room event
   socket.on("create room", initializeRoom);
