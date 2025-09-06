@@ -1,16 +1,15 @@
 import initializeRoom from "./roomInitialization.js";
 import connectHandler from "./connectHandler.js";
 import messageHandler from "./messageHandler.js";
-import disconnectionHandler from "./disconnectionHandler.js";
 
 const onConnection = (socket) => {
   // set user to online upon login event
-  socket.on("set online", async (token, status, callback) => {
+  socket.on("set status", async (token, status, callback) => {
     const isSuccess = await connectHandler(token, status);
 
     if (isSuccess) {
       callback({ success: true });
-      socket.broadcast.emit("set online", { refetch: true });
+      socket.broadcast.emit("set status", { refetch: true });
     }
   });
 
@@ -35,8 +34,6 @@ const onConnection = (socket) => {
   socket.on("join room", (room) => {
     socket.join(room);
   });
-
-  socket.on("disconnect", disconnectionHandler);
 };
 
 export default onConnection;

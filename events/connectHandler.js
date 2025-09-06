@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-const connectHandler = async (token, status, callback) => {
+const connectHandler = async (token, status) => {
   const user = jwt.verify(token, process.env.JWT_SECRET);
 
   const updatedUserStatus = await prisma.user.update({
