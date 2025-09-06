@@ -16,7 +16,6 @@ const connectHandler = async (token, status, callback) => {
   });
 
   if (updatedUserStatus) {
-    callback({ success: true });
     return true;
   }
 };
