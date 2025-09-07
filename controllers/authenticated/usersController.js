@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const usersController = (() => {
   const getAllUsers = async (req, res) => {
-    const { tokenHolder, filter } = req.query;
+    const { tokenHolder, filter, search } = req.query;
     if (tokenHolder === "true") {
       const user = await prisma.user.findMany({
         where: {
@@ -17,14 +17,75 @@ const usersController = (() => {
         status: 200,
         data: user,
       });
+    } else if (search && filter) {
+      let users = null;
+      if (filter !== "ALL") {
+        if (filter !== "OFFLINE") {
+          users = await prisma.user.findMany({
+            where: {
+              status: filter,
+              id: {
+                not: req.user.id,
+              },
+              username: {
+                contains: search,
+              },
+            },
+          });
+        } else {
+          users = await prisma.user.findMany({
+            where: {
+              OR: [{ status: filter }, { status: null }],
+              id: {
+                not: req.user.id,
+              },
+              username: {
+                contains: search,
+              },
+            },
+          });
+        }
+      } else {
+        users = await prisma.user.findMany({
+          where: {
+            id: {
+              not: req.user.id,
+            },
+            username: {
+              contains: search,
+            },
+          },
+        });
+      }
+      return res.status(200).json({
+        code: "FETCH_SUCCESS",
+        message: "User fetched successfuly",
+        status: 200,
+        data: users,
+      });
     } else if (filter) {
       let users = null;
       if (filter !== "ALL") {
-        users = await prisma.user.findMany({
-          where: {
-            status: filter,
-          },
-        });
+        if (filter !== "OFFLINE") {
+          users = await prisma.user.findMany({
+            where: {
+              status: filter,
+              id: {
+                not: req.user.id,
+              },
+            },
+          });
+        } else {
+          users = await prisma.user.findMany({
+            where: {
+              OR: [{ status: filter }, { status: null }],
+              id: {
+                not: req.user.id,
+              },
+            },
+          });
+        }
+        console.log(users);
       } else {
         users = await prisma.user.findMany({
           where: {
@@ -34,6 +95,26 @@ const usersController = (() => {
           },
         });
       }
+      return res.status(200).json({
+        code: "FETCH_SUCCESS",
+        message: "User fetched successfuly",
+        status: 200,
+        data: users,
+      });
+    } else if (search) {
+      let users = null;
+
+      users = await prisma.user.findMany({
+        where: {
+          id: {
+            not: req.user.id,
+          },
+          username: {
+            contains: search,
+          },
+        },
+      });
+
       return res.status(200).json({
         code: "FETCH_SUCCESS",
         message: "User fetched successfuly",
