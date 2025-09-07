@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const usersController = (() => {
   const getAllUsers = async (req, res) => {
-    const { tokenHolder } = req.query;
+    const { tokenHolder, filter } = req.query;
     if (tokenHolder === "true") {
       const user = await prisma.user.findMany({
         where: {
@@ -16,6 +16,29 @@ const usersController = (() => {
         message: "User fetched successfuly",
         status: 200,
         data: user,
+      });
+    } else if (filter) {
+      let users = null;
+      if (filter !== "ALL") {
+        users = await prisma.user.findMany({
+          where: {
+            status: filter,
+          },
+        });
+      } else {
+        users = await prisma.user.findMany({
+          where: {
+            id: {
+              not: req.user.id,
+            },
+          },
+        });
+      }
+      return res.status(200).json({
+        code: "FETCH_SUCCESS",
+        message: "User fetched successfuly",
+        status: 200,
+        data: users,
       });
     } else {
       try {
