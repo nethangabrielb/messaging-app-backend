@@ -20,6 +20,7 @@ const registerController = (() => {
             username,
             email,
             password: hashedPassword,
+            avatar: "default.jpg",
           },
         });
 
