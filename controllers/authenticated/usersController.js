@@ -85,7 +85,6 @@ const usersController = (() => {
             },
           });
         }
-        console.log(users);
       } else {
         users = await prisma.user.findMany({
           where: {
