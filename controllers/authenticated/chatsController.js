@@ -29,6 +29,7 @@ const chatsController = (() => {
             },
             select: {
               username: true,
+              avatar: true,
             },
           },
         },
