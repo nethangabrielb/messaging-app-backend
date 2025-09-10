@@ -7,5 +7,6 @@ const { Router } = express;
 const userRouter = Router();
 
 userRouter.get("/", verifyToken, usersController.getAllUsers);
+userRouter.put("/:userId", verifyToken, usersController.editUserProfile);
 
 export default userRouter;

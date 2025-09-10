@@ -1,4 +1,9 @@
 import { PrismaClient } from "../../generated/prisma/client.js";
+import multer from "multer";
+import { s3Client } from "../../clients/s3Client.js";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+
+const upload = multer();
 
 const prisma = new PrismaClient();
 
@@ -146,7 +151,56 @@ const usersController = (() => {
     }
   };
 
-  return { getAllUsers };
+  const editUserProfile = [
+    upload.single("file"),
+    async (req, res) => {
+      const { username, bio } = req.body;
+      const { userId } = req.params;
+      const file = req.file;
+      let updatedUser = null;
+
+      // If there is a file, upload file
+      // and save the key
+      if (file) {
+        await s3Client.send(
+          new PutObjectCommand({
+            Bucket: process.env.R2_BUCKET,
+            Key: `${userId}-${file.originalname}`,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+          })
+        );
+        updatedUser = await prisma.user.update({
+          where: {
+            id: Number(userId),
+          },
+          data: {
+            username,
+            bio,
+            avatar: `${userId}-${file.originalname}`,
+          },
+        });
+      } else {
+        updatedUser = await prisma.user.update({
+          where: {
+            id: Number(userId),
+          },
+          data: {
+            username,
+            bio,
+          },
+        });
+      }
+      return res.status(200).json({
+        code: "UPDATE_SUCCESS",
+        message: "Profile updated successfuly!",
+        status: 200,
+        data: updatedUser,
+      });
+    },
+  ];
+
+  return { getAllUsers, editUserProfile };
 })();
 
 export default usersController;
