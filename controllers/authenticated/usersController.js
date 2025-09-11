@@ -156,87 +156,96 @@ const usersController = (() => {
     upload.single("file"),
     async (req, res) => {
       const { userId } = req.params;
-      if (req.query.editPassword) {
-        const { password, newPassword } = req.body;
+      try {
+        if (req.query.editPassword) {
+          const { password, newPassword } = req.body;
 
-        // check if password is valid
-        const user = await prisma.user.findUnique({
-          where: {
-            id: Number(userId),
-          },
-        });
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-          return res.status(401).json({
-            code: "PASSWORD_SUCCESS",
-            message: "The password you entered is incorrect",
-            status: 401,
+          // check if password is valid
+          const user = await prisma.user.findUnique({
+            where: {
+              id: Number(userId),
+            },
           });
-        }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 15);
+          const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        const updatedUser = await prisma.user.update({
-          where: {
-            id: Number(userId),
-          },
-          data: {
-            password: hashedPassword,
-          },
-        });
+          if (!isPasswordValid) {
+            return res.status(401).json({
+              code: "PASSWORD_SUCCESS",
+              message: "The password you entered is incorrect",
+              status: 401,
+            });
+          }
 
-        if (updatedUser) {
+          const hashedPassword = await bcrypt.hash(newPassword, 15);
+
+          const updatedUser = await prisma.user.update({
+            where: {
+              id: Number(userId),
+            },
+            data: {
+              password: hashedPassword,
+            },
+          });
+
+          if (updatedUser) {
+            return res.status(200).json({
+              code: "UPDATE_SUCCESS",
+              message: "Password changed successfuly!",
+              status: 200,
+              data: updatedUser,
+            });
+          }
+        } else {
+          const { username, bio } = req.body;
+          const file = req.file;
+          let updatedUser = null;
+
+          // If there is a file, upload file
+          // and save the key
+          if (file) {
+            await s3Client.send(
+              new PutObjectCommand({
+                Bucket: process.env.R2_BUCKET,
+                Key: `${userId}-${file.originalname}`,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+              })
+            );
+            updatedUser = await prisma.user.update({
+              where: {
+                id: Number(userId),
+              },
+              data: {
+                username,
+                bio,
+                avatar: `${userId}-${file.originalname}`,
+              },
+            });
+          } else {
+            updatedUser = await prisma.user.update({
+              where: {
+                id: Number(userId),
+              },
+              data: {
+                username,
+                bio,
+              },
+            });
+          }
           return res.status(200).json({
             code: "UPDATE_SUCCESS",
-            message: "Password changed successfuly!",
+            message: "Profile updated successfuly!",
             status: 200,
             data: updatedUser,
           });
         }
-      } else {
-        const { username, bio } = req.body;
-        const file = req.file;
-        let updatedUser = null;
-
-        // If there is a file, upload file
-        // and save the key
-        if (file) {
-          await s3Client.send(
-            new PutObjectCommand({
-              Bucket: process.env.R2_BUCKET,
-              Key: `${userId}-${file.originalname}`,
-              Body: file.buffer,
-              ContentType: file.mimetype,
-            })
-          );
-          updatedUser = await prisma.user.update({
-            where: {
-              id: Number(userId),
-            },
-            data: {
-              username,
-              bio,
-              avatar: `${userId}-${file.originalname}`,
-            },
-          });
-        } else {
-          updatedUser = await prisma.user.update({
-            where: {
-              id: Number(userId),
-            },
-            data: {
-              username,
-              bio,
-            },
-          });
-        }
-        return res.status(200).json({
-          code: "UPDATE_SUCCESS",
-          message: "Profile updated successfuly!",
-          status: 200,
-          data: updatedUser,
+      } catch (e) {
+        return res.status(500).json({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "There was an error in the server. Please try again",
+          status: 500,
+          data: e,
         });
       }
     },
