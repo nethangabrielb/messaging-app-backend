@@ -1,6 +1,7 @@
 import initializeRoom from "./roomInitialization.js";
 import connectHandler from "./connectHandler.js";
 import messageHandler from "./messageHandler.js";
+import { io } from "../app.js";
 
 const onConnection = (socket) => {
   // set user to online upon login event
@@ -17,17 +18,19 @@ const onConnection = (socket) => {
   socket.on("create room", initializeRoom);
 
   // message event
-  socket.on("message", async (message, token, roomName, callback) => {
-    const { success, senderData } = await messageHandler(
-      message,
-      token,
-      roomName,
-      callback
-    );
+  socket.on("message", async (message, token, roomName, randomId, callback) => {
+    setTimeout(async () => {
+      const { success, senderData } = await messageHandler(
+        message,
+        token,
+        roomName,
+        callback
+      );
 
-    if (success) {
-      socket.to(roomName).emit("message", message, senderData);
-    }
+      if (success) {
+        io.to(roomName).emit("message", message, senderData, randomId);
+      }
+    }, 1000);
   });
 
   // join room event
