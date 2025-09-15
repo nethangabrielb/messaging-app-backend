@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-const messageHandler = async (message, token, roomName, callback) => {
+const messageHandler = async (message, token, roomId, callback) => {
   const senderData = jwt.verify(token, process.env.JWT_SECRET);
   const room = await prisma.room.findUnique({
     where: {
-      name: roomName,
+      id: roomId,
     },
   });
 

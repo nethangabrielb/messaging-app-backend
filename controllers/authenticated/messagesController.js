@@ -4,12 +4,12 @@ const prisma = new PrismaClient();
 
 const messagesController = (() => {
   const getRoomMessages = async (req, res) => {
-    const { roomName } = req.params;
+    const { roomId } = req.params;
 
     const room = await prisma.message.findMany({
       where: {
         room: {
-          name: roomName,
+          id: Number(roomId),
         },
       },
     });

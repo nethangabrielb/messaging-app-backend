@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "../generated/prisma/client.js";
-import CryptoJS from "crypto-js";
 
 const prisma = new PrismaClient();
 
@@ -14,27 +13,27 @@ const initializeRoom = async (token, recipientId, callback) => {
   });
 
   // Find room if it exists
-  const roomName = CryptoJS.MD5(
-    `${client.username}${recipient.username}`
-  ).toString();
-
-  const room = await prisma.room.findUnique({
+  const room = await prisma.room.findFirst({
     where: {
-      name: roomName,
+      AND: [
+        { users: { some: { id: client.id } } },
+        { users: { some: { id: recipient.id } } },
+      ],
     },
   });
+
   if (room) {
     callback({ success: true, message: null, room });
   } else {
     // Otherwise create new room
     const roomNew = await prisma.room.create({
       data: {
-        name: roomName,
         users: {
-          connect: [client, recipient],
+          connect: [{ id: client.id }, { id: recipient.id }],
         },
       },
     });
+
     if (roomNew) {
       callback({
         success: true,

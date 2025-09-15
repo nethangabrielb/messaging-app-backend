@@ -30,7 +30,7 @@ const chatsController = (() => {
             select: {
               username: true,
               avatar: true,
-              status: true
+              status: true,
             },
           },
         },

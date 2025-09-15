@@ -18,17 +18,17 @@ const onConnection = (socket) => {
   socket.on("create room", initializeRoom);
 
   // message event
-  socket.on("message", async (message, token, roomName, randomId, callback) => {
+  socket.on("message", async (message, token, roomId, randomId, callback) => {
     setTimeout(async () => {
       const { success, senderData } = await messageHandler(
         message,
         token,
-        roomName,
+        roomId,
         callback
       );
 
       if (success) {
-        io.to(roomName).emit("message", message, senderData, randomId);
+        io.to(roomId).emit("message", message, senderData, randomId);
       }
     }, 1000);
   });
