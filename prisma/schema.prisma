@@ -30,6 +30,7 @@ model User {
 
 model Room {
   id      Int       @id @default(autoincrement())
+  unread  Int       @default(0)
   users   User[]    @relation("chatroom")
   Message Message[]
 }
