@@ -28,11 +28,13 @@ const chatsController = (() => {
               },
             },
             select: {
+              id: true,
               username: true,
               avatar: true,
               status: true,
             },
           },
+          Notification: true,
         },
       });
 

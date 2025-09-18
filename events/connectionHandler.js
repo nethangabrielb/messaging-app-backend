@@ -1,6 +1,8 @@
 import initializeRoom from "./roomInitialization.js";
 import connectHandler from "./connectHandler.js";
 import messageHandler from "./messageHandler.js";
+import notificationHandler from "./notificationHandler.js";
+
 import { io } from "../app.js";
 
 const onConnection = (socket) => {
@@ -28,7 +30,7 @@ const onConnection = (socket) => {
       );
 
       if (success) {
-        io.to(roomId).emit("message", message, senderData, randomId);
+        io.to(roomId).emit("message", message, senderData, randomId, roomId);
       }
     }, 1000);
   });
@@ -36,6 +38,15 @@ const onConnection = (socket) => {
   // join room event
   socket.on("join room", (room) => {
     socket.join(room);
+  });
+
+  // notifications handler
+  socket.on("notification", async (roomId, senderId) => {
+    const { success } = await notificationHandler(senderId, roomId);
+
+    if (success) {
+      io.emit("notification", senderId, success);
+    }
   });
 };
 
