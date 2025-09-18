@@ -12,8 +12,6 @@ const notificationHandler = async (userId, roomId) => {
     },
   });
 
-  console.log(notification);
-
   // if notification alraedy exist we increment
   // otherwise we create a new one
   if (notification) {
