@@ -1,7 +1,10 @@
 import initializeRoom from "./roomInitialization.js";
 import connectHandler from "./connectHandler.js";
 import messageHandler from "./messageHandler.js";
-import notificationHandler from "./notificationHandler.js";
+import {
+  notificationHandler,
+  clearNotificationHandler,
+} from "./notificationHandler.js";
 
 import { io } from "../app.js";
 
@@ -46,6 +49,14 @@ const onConnection = (socket) => {
 
     if (success) {
       io.emit("notification", senderId, success);
+    }
+  });
+
+  socket.on("clear notifications", async (userId, roomId) => {
+    const { success } = await clearNotificationHandler(userId, roomId);
+
+    if (success) {
+      socket.emit("clear notifications", success);
     }
   });
 };

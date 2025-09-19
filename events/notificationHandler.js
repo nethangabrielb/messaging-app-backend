@@ -40,4 +40,30 @@ const notificationHandler = async (userId, roomId) => {
   }
 };
 
-export default notificationHandler;
+const clearNotificationHandler = async (userId, roomId) => {
+  const notification = await prisma.notification.findFirst({
+    where: {
+      AND: [{ roomId }, { userId }],
+    },
+  });
+
+  // delete if it exists
+  if (notification) {
+    const deletedNotification = await prisma.notification.delete({
+      where: {
+        userId_roomId: {
+          userId,
+          roomId,
+        },
+      },
+    });
+
+    if (deletedNotification) {
+      return { success: true };
+    }
+  } else {
+    return { success: false };
+  }
+};
+
+export { notificationHandler, clearNotificationHandler };
