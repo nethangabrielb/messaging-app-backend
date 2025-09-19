@@ -30,7 +30,7 @@ const onConnection = (socket) => {
       );
 
       if (success) {
-        io.to(roomId).emit("message", message, senderData, randomId, roomId);
+        io.emit("message", message, senderData, randomId, roomId);
       }
     }, 1000);
   });
