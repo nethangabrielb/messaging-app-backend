@@ -24,18 +24,16 @@ const onConnection = (socket) => {
 
   // message event
   socket.on("message", async (message, token, roomId, randomId, callback) => {
-    setTimeout(async () => {
-      const { success, senderData } = await messageHandler(
-        message,
-        token,
-        roomId,
-        callback
-      );
+    const { success, senderData } = await messageHandler(
+      message,
+      token,
+      roomId,
+      callback
+    );
 
-      if (success) {
-        io.emit("message", message, senderData, randomId, roomId);
-      }
-    }, 1000);
+    if (success) {
+      io.emit("message", message, senderData, randomId, roomId);
+    }
   });
 
   // join room event
