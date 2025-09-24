@@ -29,6 +29,10 @@ app.use("/api/users", userRouter);
 app.use("/api/chats", chatRouter);
 app.use("/api/messages", messageRouter);
 
+app.get("/api/ping", (req, res) => {
+  res.json({ success: true });
+});
+
 io.on("connection", onConnection);
 
 const PORT = process.env.PORT || 3000;
