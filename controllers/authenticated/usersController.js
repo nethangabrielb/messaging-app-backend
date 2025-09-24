@@ -1,8 +1,8 @@
 import { PrismaClient } from "../../generated/prisma/client.js";
 import multer from "multer";
-import { s3Client } from "../../clients/s3Client.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import bcrypt from "bcryptjs";
+import { s3Client } from "../../clients/s3Client.js";
 
 const upload = multer();
 
@@ -206,7 +206,7 @@ const usersController = (() => {
           if (file) {
             await s3Client.send(
               new PutObjectCommand({
-                Bucket: process.env.R2_BUCKET,
+                Bucket: process.env.SUPABASE_BUCKET,
                 Key: `${userId}-${file.originalname}`,
                 Body: file.buffer,
                 ContentType: file.mimetype,
