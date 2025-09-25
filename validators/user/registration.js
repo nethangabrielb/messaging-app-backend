@@ -15,7 +15,6 @@ const validateRegistration = [
     // Return errors if there are any
     if (!errors.isEmpty()) {
       const errorsArr = errors.array({ onlyFirstError: true });
-      console.log(errorsArr);
       return res.status(400).json({
         code: "INVALID_INPUT",
         data: errorsArr.map((err) => err),
