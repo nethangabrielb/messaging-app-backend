@@ -1,9 +1,9 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 import { validatePassword } from "../../validators/user/passwordChange.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
+ 
 
 const resetPasswordController = (() => {
   const resetPassword = [

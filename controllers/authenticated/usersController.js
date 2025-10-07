@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 import multer from "multer";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import bcrypt from "bcryptjs";
@@ -6,7 +6,7 @@ import { s3Client } from "../../clients/s3Client.js";
 
 const upload = multer();
 
-const prisma = new PrismaClient();
+ 
 
 const usersController = (() => {
   const getAllUsers = async (req, res) => {

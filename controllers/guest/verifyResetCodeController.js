@@ -1,7 +1,7 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
+ 
 
 const verifyResetCodeController = (() => {
   const verifyResetCode = async (req, res) => {

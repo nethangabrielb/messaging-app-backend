@@ -1,7 +1,7 @@
 import { body } from "express-validator";
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 
-const prisma = new PrismaClient();
+ 
 
 export default body("username")
   .exists()

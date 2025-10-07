@@ -1,9 +1,9 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 import bcrypt from "bcryptjs";
 import { validateRegistration } from "../../validators/user/registration.js";
 
 const registerController = (() => {
-  const prisma = new PrismaClient();
+  
 
   const register = [
     validateRegistration,

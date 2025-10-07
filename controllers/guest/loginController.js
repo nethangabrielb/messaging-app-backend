@@ -1,9 +1,9 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const loginController = (() => {
-  const prisma = new PrismaClient();
+  
 
   const login = async (req, res) => {
     const { email, password } = req.body;

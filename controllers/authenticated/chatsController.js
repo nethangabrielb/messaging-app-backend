@@ -1,6 +1,6 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 
-const prisma = new PrismaClient();
+ 
 
 const chatsController = (() => {
   const getChats = async (req, res) => {

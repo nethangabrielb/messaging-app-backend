@@ -1,12 +1,12 @@
 import { validateEmail } from "../../validators/user/email.js";
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 import generateSixDigitCode from "../../utils/generateSixDigitCode.js";
 import setExpiry from "../../utils/setExpiry.js";
 import nodemailer from "nodemailer";
 import path from "path";
 import ejs from "ejs";
 
-const prisma = new PrismaClient();
+ 
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,

@@ -1,7 +1,7 @@
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../clients/prismaClient.js";
 import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
+ 
 
 const messageHandler = async (message, token, roomId, callback) => {
   const senderData = jwt.verify(token, process.env.JWT_SECRET);

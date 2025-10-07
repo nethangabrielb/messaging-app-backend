@@ -3,9 +3,9 @@ import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import ejs from "ejs";
 import path from "path";
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { prisma } from "../../clients/prismaClient.js";
 
-const prisma = new PrismaClient();
+ 
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,

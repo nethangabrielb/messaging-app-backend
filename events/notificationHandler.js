@@ -1,6 +1,4 @@
-import { PrismaClient } from "../generated/prisma/client.js";
-
-const prisma = new PrismaClient();
+import { prisma } from "../clients/prismaClient.js";
 
 const notificationHandler = async (userId, roomId) => {
   let updatedNotification = null;
